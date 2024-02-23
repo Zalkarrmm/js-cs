@@ -113,9 +113,37 @@ const data = withHiddenProps({
 
 // Optimization
 
+
+const IndexedArray = new Proxy(Array, {
+  construct(target, [args]){
+    const index = {}
+    args.forEach(item => (item[item.id] = item))
+
+    return new Proxy(new target(...args), {
+      get(arr, prop){
+        switch (prop) {
+          case 'push': 
+            return (item) => {
+              index[item.id] = item
+              arr[prop].call(arr, item)
+            }
+          case 'findById':
+            return id => index[id]
+          default:
+            return arr[prop]
+        }
+      }
+    })
+  }
+})
+
+
 const userData = [
   {id: 1, name: 'Alex', job: 'Fullstack', age: 25},
   {id: 2, name: 'Opra', job: 'Front-end', age: 23},
   {id: 3, name: 'Andy', job: 'Back-end', age: 19},
   {id: 4, name: 'Oleg', job: 'DevOps', age: 32 }
 ]
+
+
+const users = new IndexedArray(userData)
