@@ -7,7 +7,7 @@
 
 // // Object
 
-// const OP = new Proxy(person, { // new Proxy(target, {}:catchers)
+// const OP = new Proxy(person, {       // new Proxy(target, {}:catchers)
 //   get(target, prop) { // get(target, key)
 //     if(!(prop in target)){
 //       return prop
